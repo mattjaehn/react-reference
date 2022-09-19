@@ -9,6 +9,15 @@ import './index.css';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
+
+if (process.env.NODE_ENV !== 'production') {
+    const { worker } = require('./mocks/browser');
+    worker.start();
+}
+
+
+
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

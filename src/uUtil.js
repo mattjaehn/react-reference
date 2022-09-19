@@ -26,6 +26,8 @@ export async function normalizeApiData(entities) {
 }
 
 
+export const uCopyDeep = x => JSON.parse(JSON.stringify(x));
+
 
 /**
  * generalized CRUD endpoints, based on rtk-query.
@@ -47,11 +49,11 @@ export const consUEndpoints =
 
         [`get${plural}`]: build.query({
             query:
-                ({page, pageSize}={}) =>
+                ({pageNumber, pageSize}={}) =>
                     `${urlPath}/` +
                         (
-                            page && pageSize
-                            ? `?skip=${page * pageSize}&limit=${pageSize}`
+                            pageNumber && pageSize
+                            ? `?skip=${pageNumber * pageSize}&limit=${pageSize}`
                             : ''
                         ),
             providesTags:

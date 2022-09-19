@@ -1,4 +1,3 @@
-import { retry } from '@reduxjs/toolkit/query/react'
 import { api } from './api'
 
 
@@ -12,19 +11,17 @@ const tagExtractor = (ans=[], _err, _id) =>
 const transformPatients = (p) => p;
 
 
-const patientsAdapter = createEntityAdapter({
-    error: null,
-});
+//const patientsAdapter = createEntityAdapter({ error: null, });
 
-export const postsApi = ({ urlPath }) => api.injectEndpoints({
+export const patientsApi = ({ urlPath }) => api.injectEndpoints({
     endpoints: (build) => ({
         getPatients: build.query({
             query:
-                ({page, pageSize}={}) =>
+                ({pageNumber, pageSize}={}) =>
                     `${urlPath}/` +
                         (
-                            page && pageSize
-                            ? `?skip=${page * pageSize}&limit=${pageSize}`
+                            pageNumber && pageSize
+                            ? `?skip=${pageNumber * pageSize}&limit=${pageSize}`
                             : ''
                         ),
             providesTags:
@@ -32,17 +29,18 @@ export const postsApi = ({ urlPath }) => api.injectEndpoints({
         }),
         getPatientsByOrg: build.query({
             query:
-                ({orgId, page, pageSize}) =>
+                ({orgId, pageNumber, pageSize}) =>
                     `${urlPath}/?org_id=${orgId}` +
                         (
-                            page && pageSize
-                            ? `&skip=${page * pageSize}&limit=${pageSize}`
+                            pageNumber && pageSize
+                            ? `&skip=${pageNumber * pageSize}&limit=${pageSize}`
                             : ''
                         ),
             providesTags:
                 tagExtractor,
         }),
 
+        /*
         async onCacheEntryAdded(patientId,
                 {
                     cacheDataLoaded,
@@ -63,19 +61,6 @@ export const postsApi = ({ urlPath }) => api.injectEndpoints({
                 //console.log(`error in onCacheEntryAdded callback - ${util.err}`)
             }
         }
+        */
     })
 });
-
-export const {
-  useAddPostMutation,
-  useDeletePostMutation,
-  useGetPostQuery,
-  useGetPostsQuery,
-  useLoginMutation,
-  useUpdatePostMutation,
-  useGetErrorProneQuery,
-} = postsApi
-
-export const {
-  endpoints: { login, getPost },
-} = postsApi
