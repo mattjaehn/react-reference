@@ -87,8 +87,7 @@ export const consUEndpoints =
                     method: 'PUT',
                     body };
                 },
-            invalidatesTags:
-                (_ignoreItems, _err, id) => [{ type: plural, id }]
+            invalidatesTags: (_ignoreItems, _err, id) => [{ type: plural, id }]
         }),
 
         [`delete${singular}`]: build.mutation({
@@ -96,8 +95,7 @@ export const consUEndpoints =
                 url: `${urlPath}/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags:
-                (_ignoreItems, _err, id) => [{ type: plural, id }]
+            invalidatesTags: (_ignoreItems, _err, id) => [{ type: plural, id }]
         }),
     });
 
