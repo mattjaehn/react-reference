@@ -17,7 +17,10 @@ module.exports = function override(config) {
         new webpack.ProvidePlugin({
             process: 'process/browser',
             Buffer: ['buffer', 'Buffer'],
-        })
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': 'development',
+        }),
     ])
     if (!config.module) config.module = {rules:[]}
     config.module.rules.push({

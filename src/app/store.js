@@ -1,6 +1,16 @@
+import { applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'remote-redux-devtools'
 import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { api } from './api/api';
+
+
+const devtoolsConfig = {
+    realtime: true,
+    name: "matts-redux",
+    "hostname": "localhost",
+    "port": 3939,
+}
+
 
 export const createStore = (options) =>
   configureStore({
@@ -11,6 +21,11 @@ export const createStore = (options) =>
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(api.middleware),
     ...options,
+    devTools: devtoolsConfig,
   })
+
+
+
+
 
 export const store = createStore()

@@ -45,5 +45,9 @@ export const api = createApi({
 
 
 
-export const enhancedApi = api.enhanceEndpoints({});
+export const enhancedApi = api.enhanceEndpoints({
+    endpoint: () => ({
+        healthCheck: () => 'ok computer',
+    })
+});
 
