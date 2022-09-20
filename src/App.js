@@ -8,12 +8,12 @@ function App() {
   return  (
     <Routes>
         <Route
-            path="patients"
+            path="/"
             element={<Patients />}
         />
     </Routes>
   )
-  
+
   }
 
 export default App;
