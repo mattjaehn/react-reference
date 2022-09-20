@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import { patientsApi } from '../../app/api/patientsApiSlice';
+import { patientsApi } from '../app/api/patientsApiSlice';
 
 
 import {

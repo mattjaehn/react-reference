@@ -37,3 +37,15 @@
     transform: translateY(0px);
   }
 }
+
+
+/* matt */
+ul {
+  list-style: none;
+  width: 100%;
+}
+
+ul li {
+  display: inline;
+  margin: 50px;
+}
