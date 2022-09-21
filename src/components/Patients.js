@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import { patientsApi } from '../app/api/patientsApiSlice';
+import { patientsApi } from '../app/api';
 
 
 import {
@@ -183,11 +183,12 @@ export const PatientDetail = ({ p }) => {
 
 
 const Patients = () => {
-    const { data: pats, isLoading } = patientsApi.useGetPatientsQuery()
+
+    const { data, error, isLoading } = patientsApi.useGetPatientsQuery()
     return  (
       <div>
         <span>here are some patients:</span>
-        <div>{JSON.stringify(pats)}</div>
+        <div>{JSON.stringify(data)}</div>
       </div>);
 };
 

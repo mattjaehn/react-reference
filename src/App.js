@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, RouteLink } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import { Nav, Patients} from './components';
+import { Nav, ErrorBuddy, Patients, NotFounder } from './components';
 import { Main } from './pages';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/patients/*" element={ <span>huh</span>} />
+        <Route path="/patients/*" element={<Patients />} />
       </Routes>
     </>
   );

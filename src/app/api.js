@@ -1,7 +1,7 @@
 
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 
-import { baseApiUrl } from '../config';
+import { baseApiUrl } from './config';
 
 
 // Create our baseQuery instance
@@ -15,9 +15,9 @@ const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 })
  * Create a base API to inject endpoints into elsewhere.
  * Components using this API should import from the injected site,
  * in order to get the appropriate types,
- * and to ensure that the file injecting the endpoints is loaded 
+ * and to ensure that the file injecting the endpoints is loaded
  */
-export const api = createApi({
+export const patientsApi = createApi({
   /**
    * `reducerPath` is optional and will not be required by most users.
    * This is useful if you have multiple API definitions,
@@ -25,11 +25,11 @@ export const api = createApi({
    * Otherwise, a single API definition should be used in order to support tag invalidation,
    * among other features
    */
-  //reducerPath: 'api',
+  reducerPath: 'patientsApi',
   /**
    * A bare bones base query would just be `baseQuery: fetchBaseQuery({ baseUrl: '/' })`
    */
-  baseQuery: baseQueryWithRetry,
+  baseQuery: baseQuery,  //baseQueryWithRetry,
   /**
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
@@ -40,14 +40,22 @@ export const api = createApi({
    * which is why no endpoints are shown below.
    * If you want all endpoints defined in the same file, they could be included here instead
    */
-  endpoints: () => ({}),
+  endpoints: (builder) => ({
+
+    getPatients: builder.query({
+      query: () => `patients`,
+    }),
+
+  }),
 })
 
 
 
+
+/*
 export const enhancedApi = api.enhanceEndpoints({
     endpoint: () => ({
         healthCheck: () => 'ok computer',
     })
 });
-
+*/

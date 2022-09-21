@@ -1,31 +1,28 @@
-import { applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'remote-redux-devtools'
+//import { applyMiddleware } from 'redux';
+//import { composeWithDevTools } from 'remote-redux-devtools'
+import { setupListeners } from '@reduxjs/toolkit/query'
 import { configureStore } from '@reduxjs/toolkit';
-import { api } from './api/api';
+import { patientsApi } from './api';
 
 
-const devtoolsConfig = {
-    realtime: true,
-    name: "matts-redux",
-    "hostname": "localhost",
-    "port": 3939,
-}
-
-
-export const createStore = (options) =>
+export const store =
   configureStore({
     reducer: {
-      [api.reducerPath]: api.reducer,
+      [patientsApi.reducerPath]: patientsApi.reducer,
       //other reducer slices not directly associated with an api,...
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
-    ...options,
-    devTools: devtoolsConfig,
+      getDefaultMiddleware().concat(patientsApi.middleware),
+    devTools: {
+      realtime: true,
+      name: "matts-redux",
+      "hostname": "localhost",
+      "port": 3000,
+     },
   })
+;
 
 
 
+setupListeners(store.dispatch)
 
-
-export const store = createStore()

@@ -12,6 +12,7 @@ const getPatientsPath = `${baseApiUrl}/patients`
 export const handlers = [
     rest.get(getPatientsPath, async (req, res, ctx) => {
 
+        console.log(`rest.get(${getPatientsPath}) begin...\n`);
         const [pageNumber, pageSize, orgId] = ['pageNumber', 'pageSize', 'orgId']
             .map(
                 x => req.url.searchParams.get(x)
