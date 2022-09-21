@@ -3,7 +3,7 @@ import { Routes, Route, RouteLink } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import { Nav, ErrorBuddy, Patients, NotFounder } from './components';
-import { Main } from './pages';
+import { Main, PatientsPage } from './pages';
 
 function App() {
   return  (
@@ -11,7 +11,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/patients/*" element={<Patients />} />
+        <Route path="/patients/*" element={<PatientsPage />} />
       </Routes>
     </>
   );
