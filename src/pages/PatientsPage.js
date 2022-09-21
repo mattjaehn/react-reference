@@ -4,12 +4,24 @@
 import Reach from 'react';
 //import { PatientsList } from '../components/Patients';
 import { usePatientsQuery } from '../app/api';
+import { PatientsList } from '../components/Patients';
 
 
 
 
+const PatientsPage = () => {
 
-const PatientsPage = ({ ...args }) => {
+  return (
+    <div>
+      <h2>a page for patients</h2>
+      <PatientsList />
+    </div>
+  )
+};
+
+
+
+const PxxatientsPage = ({ ...args }) => {
 
   const { data, error } = usePatientsQuery();
 
