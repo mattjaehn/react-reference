@@ -42,12 +42,19 @@ export const patientsApi = createApi({
    */
   endpoints: (builder) => ({
 
-    getPatients: builder.query({
+    patients: builder.query({
       query: () => `patients`,
     }),
 
   }),
 })
+
+
+
+
+export const {
+  usePatientsQuery,
+} = patientsApi;
 
 
 

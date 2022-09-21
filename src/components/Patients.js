@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import { patientsApi } from '../app/api';
+import { patientsApi, usePatientsQuery } from '../app/api';
 
 
 import {
@@ -47,11 +47,11 @@ const consFiltersApplier = (filters) => (data) => {
 
 
 const PatientListItem = (p) =>
-  <>
+  <div>
     <span>patientId: {p.id}</span>
     <span>orgId: {p.orgId}</span>
     <span>name: {p.name}</span>
-  </>;
+  </div>;
 
 export const PatientsList = ({ orgId }) => {
   /*
@@ -173,8 +173,8 @@ export const PatientsList = ({ orgId }) => {
     * what react does anyway.)
     */
 
-   const { data, error } = patientsApi.endpoints.getPatients.useQuery();
-
+  //const { data, error } = patientsApi.endpoints.getPatients.useQuery();
+  const { data, error, isLoading, isSuccess }  = usePatientsQuery();
 
 
   return (
@@ -248,7 +248,7 @@ export const PatientDetail = ({ p }) => {
 
 const Patients = () => {
 
-  const { data, error, isLoading } = patientsApi.useGetPatientsQuery()
+  const { data, error, isLoading } = usePatientsQuery();
   return  (
   <div>
     <span>here are some patients:</span>

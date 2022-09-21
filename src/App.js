@@ -11,7 +11,7 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/patients/*" element={<PatientsPage />} />
+        <Route path="/patients" element={<PatientsPage />} />
       </Routes>
     </>
   );

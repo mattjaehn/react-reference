@@ -3,7 +3,7 @@
 
 import Reach from 'react';
 //import { PatientsList } from '../components/Patients';
-import { patientsApi } from '../app/api';
+import { usePatientsQuery } from '../app/api';
 
 
 
@@ -11,16 +11,13 @@ import { patientsApi } from '../app/api';
 
 const PatientsPage = ({ ...args }) => {
 
-  const { data, error } = patientsApi.endpoints.getPatients.useQuery();
+  const { data, error } = usePatientsQuery();
 
   console.log(`data: ${JSON.stringify(data)}.`);
-  return
-    error
-    ? (<h1>FREAKING ERROR!</h1>)
-    : (
+  return (
       <div>
         <h1>ok computer!</h1>
-        <span>{JSON.stringify(data)}</span>
+        
         <ul>
           {Object.values(data).map(p => (
             <li key={p.id}>
@@ -28,6 +25,7 @@ const PatientsPage = ({ ...args }) => {
             </li>
           ))}
         </ul>
+        <span>{JSON.stringify(data)}</span>
       </div>
     );
 }

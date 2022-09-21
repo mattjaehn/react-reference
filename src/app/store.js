@@ -13,16 +13,19 @@ export const store =
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(patientsApi.middleware),
+    
+    /*
     devTools: {
       realtime: true,
       name: "matts-redux",
       "hostname": "localhost",
       "port": 3000,
      },
+     */
   })
 ;
 
 
 
-setupListeners(store.dispatch)
+//setupListeners(store.dispatch)
 
