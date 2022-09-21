@@ -45,6 +45,23 @@ export const patientsApi = createApi({
     patients: builder.query({
       query: () => `patients`,
     }),
+    patient: builder.query({
+      query: (id) => `patient/${id}`,
+    }),
+
+    updatePatient: builder.mutation({
+      query: ({ id, ...p }) => ({
+        url: `/patients/${id}`,
+        method: 'PUT',
+        body: p,
+      })
+    }),
+    deletePatient: builder.mutation({
+      query: (id) => ({
+        url: `/patients/${id}`,
+        method: 'DELETE',
+      })
+    })
 
   }),
 })

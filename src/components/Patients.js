@@ -27,25 +27,6 @@ import {
 
 
 
-
-const consFiltersApplier = (filters) => (data) => {
-  //TODO filter logic here
-  /*p => {
-    for ([k,v] in patientFilters) {
-      if (p[k] != patientFilters[k])
-          return false;
-    }
-    return true; */
-  return true;
-};
-
-
-
-
-//const onSelect = (id) => { console.log(`onselect(${id})`) }
-
-
-
 const PatientListItem = (p) =>
   <div>
     <span>patientId: {p.id}</span>
@@ -65,13 +46,9 @@ export const PatientsList = ({ orgId }) => {
    * trigger re-render of this component whenever the
    * value of what is selected changes.
    */
-  //const patients = useSelector(patientsSelector);
   const args = orgId ? { orgId } : {};
   const navigate = useNavigate();
-  /*const { data } = orgId
-              ? useGetPatientsByOrgQuery(orgId)
-              : useGetPatientsQuery();
-  */
+ 
 
   /*
     * useDispatch gives us the other direction of data
@@ -133,9 +110,8 @@ export const PatientsList = ({ orgId }) => {
     * triggers re-render on react state changes.
    */
 
-  //const doFiltering = consFiltersApplier(patientFilters);
   /**
-   * RULES of Hooking:
+   * RULES for using React hooks:
    *
    * 1. NO CONDITIONAL EXECUTION: react tracks hooks by the order in which they are executed.
    * for this reason, it is very important that every hook execute each time a component
@@ -154,7 +130,6 @@ export const PatientsList = ({ orgId }) => {
    */
   
 
-  //const [readVariable, setFunction] = useState({});
   const [selected, select] = useState();
   const [patientFilters, setPatientFilters] = useState({});
   
@@ -198,27 +173,6 @@ export const PatientsList = ({ orgId }) => {
 };
 
 
-const yyy = ({doFiltering, data, onSelect}) => {
-  //const navigate = useNavigate();
-  
-  return (
-  <section>
-    <ul>
-      {
-          data.filter(doFiltering).map(p => (
-              <PatientListItem
-                  key={p.id}
-                  data={p}
-    //              onSelect={(id) => navigate(`/patients/${id}}`)}
-              />
-
-          ))
-      }
-    </ul>
-  </section>
-);
-}
-
 const OrderListItem = ({ order: { id, ...o } }) => (
   <HStack>
     <span>id: {id}</span>
@@ -250,24 +204,19 @@ const Patients = () => {
 
   const { data, error, isLoading } = usePatientsQuery();
   return  (
-  <div>
-    <span>here are some patients:</span>
-    <div>{JSON.stringify(data)}</div>
-  </div>);
-};
-
-const x = () => {
-  return (
-  <div color="purple">
-    <div><PatientsList />
-      <span>NANCY MADE ME TAKE DOWN THE WEBSITE WRONG!</span>
+  <>
+    <div>
+      
     </div>
-  </div>
-  )
+    <div>
+      <span>here are some patients:</span>
+      
+      <PatientsList />
+      
+      <br /><br />
+      <div>{JSON.stringify(data)}</div>
+    </div>
+  </>);
 };
-
-
-//const Patients = (<span><h2>How many times did you reboot?</h2></span>)
-
 
 export default Patients
