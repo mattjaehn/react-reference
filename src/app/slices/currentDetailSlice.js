@@ -2,19 +2,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  currentPatient: null,
-  aCurrentIsSelected: false,
+  currentPatient: null
 };
 
-export const currentDetailSlice = createSlice({
+const currentDetailSlice = createSlice({
   name: 'currentDetail',
   initialState,
   reducers: {
-    setCurrentPatient(state, action) {
-      state.currentPatient = action.payload;
-    }
+    setCurrentPatient: (state, action) =>
+      ({ ...state, currentPatient: action.payload })
+
   }
 })
 
+
+console.log(`${JSON.stringify(currentDetailSlice)}`)
+
+
 export const { setCurrentPatient } = currentDetailSlice.actions;
-export default currentDetailSlice.reducer;
+export default currentDetailSlice;

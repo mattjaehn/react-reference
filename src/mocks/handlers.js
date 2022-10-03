@@ -34,7 +34,7 @@ export const handlers = [
         } catch (e) { ; }
 
         return res(
-            ctx.json(ansPats));
+            ctx.json(ansPats.slice(0,7)));
     }),
 ];
 

@@ -1,7 +1,13 @@
 
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import { createEntityAdapter } from '@reduxjs/toolkit';
 
 import { baseApiUrl } from './config';
+
+
+const patientsAdapter = createEntityAdapter({
+  sortComparer: (a,b) => `${a.id}`.localeCompare(`${b.id}`),
+})
 
 
 // Create our baseQuery instance
@@ -34,7 +40,7 @@ export const patientsApi = createApi({
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
    */
-  tagTypes: ['Patients', 'Orders',],
+  tagTypes: ['Patient',],
   /**
    * This api has endpoints injected in adjacent files,
    * which is why no endpoints are shown below.
@@ -44,24 +50,67 @@ export const patientsApi = createApi({
 
     patients: builder.query({
       query: () => `patients`,
+      providesTags: (result, err, qryArg) => {
+        console.log(`result - ${JSON.stringify(result)}`)
+        return result
+        ? [
+            {type: 'Patient', id: '*'},
+            //...result.map(({id}) => ({type: 'Patient', id}))
+        ]
+        : [{type: 'Patient', id: '*'},]
+      },
+      //transformResponse: (resp) =>
+      //  patientsAdapter.addMany(
+      //      patientsAdapter.getInitialState(),
+      //      resp),
     }),
     patient: builder.query({
       query: (id) => `patient/${id}`,
+      providesTags: (result, err, qryArg) =>
+        result
+        ? [{ type: 'Patient', id: qryArg }]
+        : [],
+      //transformResponse: (resp) =>
+        //patientsAdapter.addOne(resp),
+    }),
+
+    createPatient: builder.mutation({
+      query: ({ ...p }) => ({
+        url: `patients`,
+        method: 'POST',
+        body: p,
+      }),
+      invalidatesTags: (result, err, qryArg) =>
+        result ? [{type: 'Patient', id: '*'}] : [],
+      //transformResponse: (resp) =>
+        //patientsAdapter.addOne(resp),
     }),
 
     updatePatient: builder.mutation({
       query: ({ id, ...p }) => ({
-        url: `/patients/${id}`,
+        url: `patients/${id}`,
         method: 'PUT',
         body: p,
-      })
+      }),
+      invalidatesTags: (result, err, qryArg) =>
+        result
+        ? [{ type: 'Patient', id: qryArg }]
+        : [],
+
+      //transformResponse: (resp) =>
+        //patientsAdapter.addOne(resp),
     }),
     deletePatient: builder.mutation({
       query: (id) => ({
-        url: `/patients/${id}`,
+        url: `patients/${id}`,
         method: 'DELETE',
-      })
-    })
+      }),
+      invalidatesTags: (_ignoreItems, _err, id) =>
+        [{type: 'Patient', id: id}],
+
+      //transformResponse: (resp) =>
+      //  patientsAdapter.removeOne(resp),
+    }),
 
   }),
 })
@@ -70,6 +119,7 @@ export const patientsApi = createApi({
 
 
 export const {
+  useUpdatePatientMutation,
   usePatientsQuery,
 } = patientsApi;
 
