@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import { patientsApi, usePatientsQuery } from '../app/api';
+import { patientsApi, usePatientsQuery, usePrefetch  } from '../app/api';
+import { selectNextPage, selectHasMorePages } from '../app/slices/pagingSlice'
+
 
 
 import {
@@ -202,7 +204,20 @@ export const PatientDetail = ({ p }) => {
 
 const Patients = () => {
 
-  const { data, error, isLoading } = usePatientsQuery();
+  const { data, isLoading, isFetching } = usePatientsQuery()
+  const nextPage = useSelector(selectNextPage)
+  const hasMorePages = nextPage != null   //useSelector(selectHasMorePages)
+  const prefetchPageOfPats = usePrefetch('patients')
+  
+  
+  const prefetchNextPage = useEffect(() => {
+    if (nextPage != null)
+      prefetchPageOfPats(nextPage)
+    
+  }, [nextPage, prefetchPageOfPats, hasMorePages])
+
+
+
   return  (
   <>
     <div>
@@ -212,9 +227,15 @@ const Patients = () => {
       <span>here are some patients:</span>
       
       <PatientsList />
-      
+      <ol>
+      {data && data.map(p => 
+        (<li key={p.id}>
+          <PatientListItem p={p} key={p.id} />
+        </li>))}
+      </ol>
+
       <br /><br />
-      <div>{JSON.stringify(data)}</div>
+      <div><h2>{JSON.stringify(data)}</h2></div>
     </div>
   </>);
 };

@@ -9,6 +9,25 @@ const patientsAdapter = createEntityAdapter({
   sortComparer: (a,b) => `${a.id}`.localeCompare(`${b.id}`),
 })
 
+/*
+interface Patient {
+  id: string
+  firstName: string
+  lastName: string
+  providerOrgId string
+  orderIds string[]
+}
+
+interface Page<T> {
+  page: number
+  per_page: number
+  total_pages: number
+  data: T[]
+}
+
+*/
+
+
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
@@ -49,7 +68,7 @@ export const patientsApi = createApi({
   endpoints: (builder) => ({
 
     patients: builder.query({
-      query: () => `patients`,
+      query: (page=1) => `patients?page=${page}&page_size=${10}}`,
       providesTags: (result, err, qryArg) => {
         console.log(`result - ${JSON.stringify(result)}`)
         return result
@@ -121,6 +140,7 @@ export const patientsApi = createApi({
 export const {
   useUpdatePatientMutation,
   usePatientsQuery,
+  usePrefetch,
 } = patientsApi;
 
 

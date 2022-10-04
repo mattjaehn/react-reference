@@ -4,6 +4,7 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import { configureStore } from '@reduxjs/toolkit';
 import { patientsApi } from './api';
 import currentDetailSlice from './slices/currentDetailSlice';
+import pagingSlice from './slices/pagingSlice'
 
 
 console.log(`patientsApi.reducerPath: ${patientsApi.reducerPath}`)
@@ -14,6 +15,7 @@ export const store =
     reducer: {
       [patientsApi.reducerPath]: patientsApi.reducer,
       currentDetail: currentDetailSlice.reducer,
+      paging: pagingSlice.reducer,
 
       //other reducer slices not directly associated with an api,...
     },
