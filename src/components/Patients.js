@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { patientsApi, usePatientsQuery, usePrefetch  } from '../app/api';
-import { selectNextPage, selectHasMorePages } from '../app/slices/pagingSlice'
+import { selectNextPage, selectHasMorePages, selectPagedData } from '../app/slices/pagingSlice'
 
 
 
@@ -29,7 +29,7 @@ import {
 
 
 
-const PatientListItem = (p) =>
+const PatientListItem = ({p}) =>
   <div>
     <span>patientId: {p.id}</span>
     <span>orgId: {p.orgId}</span>
@@ -204,7 +204,8 @@ export const PatientDetail = ({ p }) => {
 
 const Patients = () => {
 
-  const { data, isLoading, isFetching } = usePatientsQuery()
+  const { isLoading, isFetching } = usePatientsQuery()
+  const data = useSelector(selectPagedData)
   const nextPage = useSelector(selectNextPage)
   const hasMorePages = nextPage != null   //useSelector(selectHasMorePages)
   const prefetchPageOfPats = usePrefetch('patients')
@@ -214,7 +215,7 @@ const Patients = () => {
     if (nextPage != null)
       prefetchPageOfPats(nextPage)
     
-  }, [nextPage, prefetchPageOfPats, hasMorePages])
+  }, [nextPage, prefetchPageOfPats, data])
 
 
 

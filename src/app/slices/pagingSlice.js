@@ -6,6 +6,7 @@ import { patientsApi } from '../api'
 
 const initialState = {
   nextPage: 1,
+  data: [],
 }
 
 const pagingSlice = createSlice({
@@ -21,8 +22,11 @@ const pagingSlice = createSlice({
         console.log(`matchFulfilled - ${JSON.stringify(action)}`)
         if (action.payload.length < 1)
           state.nextPage = null
-        else
+        else {
           state.nextPage++
+          state.data = [ ...state.data, ...action.payload ]
+          
+        }
       })
       .addDefaultCase((state, action) => {})
   }
@@ -32,3 +36,4 @@ export default pagingSlice
 
 export const selectNextPage = (state) => state.paging.nextPage
 export const selectHasMorePages = (state) => state.paging.nextPage != null
+export const selectPagedData = (state) => state.paging.data
