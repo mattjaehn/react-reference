@@ -1,19 +1,106 @@
 import React from 'react';
-import { Routes, Route, RouteLink } from 'react-router-dom';
+import { useState, useRef } from 'react'
+import { Routes, Route, RouteLink, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import { Nav, ErrorBuddy, Patients, NotFounder } from './components';
 import { Main, PatientsPage } from './pages';
 
-function App() {
+
+import { Security, LoginCallback, ImplicitCallback } from '@okta/okta-react'
+import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js'
+import { oktaAuthConfig } from './config'
+
+import { AuthedRoute } from './components/SecureRoute'
+import Loading from './components/Loading';
+
+const oktaAuth = new OktaAuth(oktaAuthConfig)
+
+const App = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [errMsg, setErrMsg] = useState(null)
+  const pendingLogin = useRef(false)
+
+  const navigate = useNavigate()
+  const triggerLogin = async () => { await oktaAuth.signInWithRedirect() }
+  const restoreOriginalUri = (_oktaAuth, originalUri) => {
+    navigate(toRelativeUrl(originalUri || '/', window.location.origin))
+  }
+
+  const handleAuthRequired = async () => {
+    if (pendingLogin.current || oktaAuth.authStateManager.getAuthState().isAuthenticated)
+      return
+    
+    pendingLogin.current = true
+    setIsLoggingIn(true)
+    try {
+      await triggerLogin()
+      setIsLoggedIn(true)
+    }
+    catch (err) {
+      setErrMsg(JSON.stringify(err))
+      setIsLoggedIn(false)
+    }
+    finally { pendingLogin.current = false }
+  }
+
+  const customAuthHandler = async () => {
+    const previousAuthState = oktaAuth.authStateManager.getPreviousAuthState()
+    if (isLoggingIn) return
+    if (!previousAuthState || !previousAuthState.isAuthenticated) {
+      setIsLoggingIn(true)
+      try {
+        await triggerLogin()
+        setIsLoggedIn(true)
+      }
+      catch (err) {
+        setErrMsg(JSON.stringify(err))
+        setIsLoggedIn(false)
+      }
+      finally { setIsLoggingIn(false) }
+
+    }
+    else
+      setIsLoggedIn(false)
+  }
+
+  const SecretPage = () => (
+    <div>
+      <h2>shh im a secret!</h2>
+    </div>
+  )
+
+  const LoginKallback = () => {
+    return (
+      <div>
+        <h3>GOT CALLED BACK YAYY</h3>
+      </div>
+    )
+  }
+
+
   return  (
-    <>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/patients" element={<PatientsPage />} />
-      </Routes>
-    </>
+
+    <Security
+        oktaAuth={oktaAuth}
+        restoreOriginalUri={restoreOriginalUri}
+        onAuthRequired={handleAuthRequired} >
+      <>
+        <Nav />
+        { !!errMsg && <h2>{errMsg}</h2> }
+        { !isLoggedIn && <button onClick={() => triggerLogin}>Login</button> }
+        <Routes>
+          <Route path="/login-callback" element={<LoginKallback />} />
+          <Route path="/" element={<Main />} />
+          <Route path="/patients" element={<PatientsPage />} />
+          <Route path="/secure" element={<AuthedRoute />}>
+            <Route path="secret" element={<SecretPage />} />
+          </Route>
+        </Routes>
+      </>
+    </Security>
   );
 }
 

@@ -25,7 +25,7 @@ const pagingSlice = createSlice({
         else {
           state.nextPage++
           state.data = [ ...state.data, ...action.payload ]
-          
+
         }
       })
       .addDefaultCase((state, action) => {})

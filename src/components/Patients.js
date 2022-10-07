@@ -209,12 +209,11 @@ const Patients = () => {
   const nextPage = useSelector(selectNextPage)
   const hasMorePages = nextPage != null   //useSelector(selectHasMorePages)
   const prefetchPageOfPats = usePrefetch('patients')
-  
-  
+
   const prefetchNextPage = useEffect(() => {
     if (nextPage != null)
       prefetchPageOfPats(nextPage)
-    
+
   }, [nextPage, prefetchPageOfPats, data])
 
 
@@ -222,14 +221,14 @@ const Patients = () => {
   return  (
   <>
     <div>
-      
+
     </div>
     <div>
       <span>here are some patients:</span>
-      
+
       <PatientsList />
       <ol>
-      {data && data.map(p => 
+      {data && data.map(p =>
         (<li key={p.id}>
           <PatientListItem p={p} key={p.id} />
         </li>))}

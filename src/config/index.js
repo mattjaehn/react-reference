@@ -1,0 +1,1 @@
+export { default as oktaAuthConfig } from './okta-config'

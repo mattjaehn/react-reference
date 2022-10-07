@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-
+import { Login } from './AuthComponents'
 
 const Nav = () => {
   return (
@@ -11,6 +11,9 @@ const Nav = () => {
         </li>
         <li>
           <Link to="/patients">Patients</Link>
+        </li>
+        <li>
+          <Link to="/secure/secret">secrets!</Link>
         </li>
       </ul>
     </>
