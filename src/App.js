@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState, useRef } from 'react'
-import { Routes, Route, RouteLink, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react'
+import { Routes, Route, RouteLink, useNavigate, useSearchParams } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import { Nav, ErrorBuddy, Patients, NotFounder } from './components';
@@ -73,10 +73,50 @@ const App = () => {
   )
 
   const LoginKallback = () => {
+
+    const [errMsg, setErrMsg] = useState(null)
+    const [toke, setToke] = useState({toke: "maybe in a minute."})
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+      (async () => {
+
+        setToke(window.location.search)
+        const url = new URL(window.location.href)
+        const txt = JSON.stringify({
+          qry: toke,
+          url: url,
+        })
+        setToke(txt)
+        
+
+        if (!oktaAuth.isLoginRedirect()) {
+          setErrMsg('LoginKallback but !isLoginRedirect')
+          return
+        }
+
+        try { await oktaAuth.handleLoginRedirect() }
+        catch (err) { setErrMsg(`{"hLRErr": ${JSON.stringify(err)} }`) }
+
+        //setToke(oktaAuth.getAccessToken())
+        setToke(oktaAuth.token.getUserInfo())
+
+    
+        navigate("/patients")
+      })()
+    }, [navigate, toke])
+
+
+
     return (
+      <>
+      { !!errMsg && <h4>{errMsg}</h4> }
       <div>
+        <h2>{JSON.stringify(toke)}</h2>
         <h3>GOT CALLED BACK YAYY</h3>
       </div>
+      </>
     )
   }
 
@@ -85,7 +125,7 @@ const App = () => {
 
     <Security
         oktaAuth={oktaAuth}
-        restoreOriginalUri={restoreOriginalUri}
+        restoreOriginalUri={() => {}}
         onAuthRequired={handleAuthRequired} >
       <>
         <Nav />
